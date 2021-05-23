@@ -1,6 +1,5 @@
 package control;
 
-import java.util.ArrayList;
 import java.util.List;
 import model.entity.Aluno;
 import model.business.AlunoBusiness;
@@ -14,35 +13,21 @@ public class AlunoControl {
     }
 
     public boolean cadastrar(String curso, int fase, String nome, int idade) {
-        int id = alunoBusiness.maiorId() + 1;
+        Aluno aluno = new Aluno(curso, fase, 0, nome, idade);
 
-        Aluno aluno = new Aluno(curso, fase, id, nome, idade);
-
-        if (alunoBusiness.insertAlunoIntoBD(aluno)) {
-            return true;
-        } else {
-            return false;
-        }
+        return alunoBusiness.insertAlunoIntoBD(aluno);
     }
 
     public boolean editar(String curso, int fase, int id, String nome, int idade) {
         Aluno aluno = new Aluno(curso, fase, id, nome, idade);
-        if (alunoBusiness.updateAlunoInBD(id, aluno)) {
-            return true;
-        } else {
-            return false;
-        }
+        return alunoBusiness.updateAlunoInBD(aluno);
     }
 
     public boolean apagar(int id) {
-        if (alunoBusiness.deleteAlunoFromBD(id)) {
-            return true;
-        } else {
-            return false;
-        }
+        return alunoBusiness.deleteAlunoFromBD(id);
     }
 
-    public ArrayList getMinhaLista() {
+    public List<Aluno> getMinhaLista() {
         return alunoBusiness.getMinhaLista();
     }
     
@@ -50,7 +35,7 @@ public class AlunoControl {
 
     @SuppressWarnings("unchecked")
     public String[][] getMinhaMatrizTexto() {
-        ArrayList<Aluno> minhalista = alunoBusiness.getMinhaLista();
+        List<Aluno> minhalista = alunoBusiness.getMinhaLista();
         int tamanho = minhalista.size();
         String[][] matrizAlunos = new String[tamanho][5];
         for (int i = 0; i < tamanho; i++) {

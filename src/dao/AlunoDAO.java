@@ -1,35 +1,129 @@
 package dao;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import model.entity.Aluno;
 
 public class AlunoDAO {
     
+    private Connection connect;
+    private Statement statement;
+    private ResultSet resultSet;
    
-    public static ArrayList<Aluno> minhaLista = new ArrayList<>();
+    public AlunoDAO() {
+        connectToDatabase("localhost", 3306, "sistema_curso", "root", "pass");
+    }
     
-    static {{
-        minhaLista.add(new Aluno("Turismo",2,0,"Maria Luiza", 19));
-        minhaLista.add(new Aluno("Engenharia Elétrica",3,1,"João Pedro", 25));
-        minhaLista.add(new Aluno("Filosofia",1,2,"Lucas Santos", 20));
-        minhaLista.add(new Aluno("Medicina",4,3,"Beatriz Oliveria", 27));
-        minhaLista.add(new Aluno("História",6,4,"Carlos Silva", 23));
-        minhaLista.add(new Aluno("Ciência da Computação",2,5,"Camila Rosa", 32));
-        minhaLista.add(new Aluno("Sistemas de Informação",3,6,"Ana Lima", 29));
-        minhaLista.add(new Aluno("Enfermagem",1,7,"Pedro Henrique", 19));
-        minhaLista.add(new Aluno("Direito",7,8,"Bruno Carvalho", 34));
-        minhaLista.add(new Aluno("Filosofia",8,9,"Paulo Borges", 25));
-        
-    }}
-    
-    // método que fornece o maior CAMPO ID dentro da nossa base de dados
-    public static int maiorId() {
-        int maiorID = 0;
-        for (int i = 0; i < minhaLista.size(); i++) {
-            if (minhaLista.get(i).getId() > maiorID) {
-                maiorID = minhaLista.get(i).getId();
-            }
+    private void connectToDatabase(String ip, int port, String schema, String username, String password) {
+        try {
+            // This will load the MySQL driver, each DB has its own driver
+            Class.forName("com.mysql.jdbc.Driver");
+            String connectionStr = "jdbc:mysql://" + ip + ":" + port + "/" + schema + "?user=" + username + "&password=" + password;
+           
+            connect = DriverManager.getConnection(connectionStr);
+
+            // Statements allow to issue SQL queries to the database
+            statement = connect.createStatement();
+        } catch (Exception ex) {
+            System.out.println("Failed to connect to database: " + ex.toString());
         }
-        return maiorID;  
-    }    
+    }
+    
+//    private static ArrayList<Aluno> minhaLista = new ArrayList<>();
+    
+    public List<Aluno> getMinhaListaAlunos(){
+        try {
+            String query = "SELECT * FROM aluno";
+
+            // Recupera dados da base.
+            ResultSet resultSet = statement.executeQuery(query);
+
+
+            // transforma as rows do database -> objetos em lista local
+            // transforma os dados da tabela na base em dados (objetos) em uma lista
+
+            List<Aluno> alunos = new ArrayList<>();
+            while (resultSet.next()) {
+
+                String curso = resultSet.getString("curso");
+                int fase = resultSet.getInt("fase");
+                int id = resultSet.getInt("id");
+                String nome = resultSet.getString("nome");
+                int idade = resultSet.getInt("idade");
+
+                Aluno aluno = new Aluno(curso, fase, id, nome, idade);
+                alunos.add(aluno);
+            }
+
+            // Todos os alunos na lista "alunos"
+
+            return alunos;
+            
+        } catch (Exception ex) {
+            System.out.println("Error while querying data: " + ex.toString());
+            return new ArrayList<>();
+        }
+    }
+    
+    public boolean insertAluno(Aluno aluno) {
+        try {
+            String insertStatement = "INSERT INTO aluno(curso, fase, nome, idade) VALUES (?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connect.prepareStatement(insertStatement);
+            preparedStatement.setString(1, aluno.getCurso());
+            preparedStatement.setInt(2, aluno.getFase());
+            preparedStatement.setString(3, aluno.getNome());
+            preparedStatement.setInt(4, aluno.getIdade());
+
+            preparedStatement.executeUpdate();
+        } catch (Exception ex) {
+            System.out.println("Error while inserting data: " + ex.toString());
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public boolean updateAluno(Aluno aluno) {
+        try {
+            String updateStatement = "UPDATE aluno SET curso=?, fase=?, nome=?, idade=? WHERE id=?";
+            PreparedStatement preparedStatement = connect.prepareStatement(updateStatement);
+            
+            preparedStatement.setString(1, aluno.getCurso());
+            preparedStatement.setInt(2, aluno.getFase());
+            preparedStatement.setString(3, aluno.getNome());
+            preparedStatement.setInt(4, aluno.getIdade());
+
+            preparedStatement.setInt(5, aluno.getId());
+            
+            preparedStatement.executeUpdate();
+
+        } catch (Exception ex) {
+            System.out.println("Error while updating data: " + ex.toString());
+            return false;
+        }
+        
+        return true;
+    }
+    
+    public boolean deleteAlunoById(int id) {
+        try {
+            String deleteStatement = "DELETE FROM aluno WHERE id=?";
+            PreparedStatement preparedStatement = connect.prepareStatement(deleteStatement);
+            preparedStatement.setInt(1, id);
+            
+            preparedStatement.executeUpdate();
+
+        } catch (Exception ex) {
+            System.out.println("Error while deleting data: " + ex.toString());
+            return false;
+        }
+        
+        return true;
+    }
 }

@@ -7,53 +7,50 @@ import model.entity.Aluno;
 
 public class AlunoBusiness {
       
+    private AlunoDAO alunoDAO;
 
-    public ArrayList getMinhaLista() {
-        return AlunoDAO.minhaLista;
+    public AlunoBusiness() {
+        this.alunoDAO = new AlunoDAO();
+    }
+
+    public List<Aluno> getMinhaLista() {
+        return alunoDAO.getMinhaListaAlunos();
     }
     
     public boolean insertAlunoIntoBD(Aluno aluno) {
-        AlunoDAO.minhaLista.add(aluno);
-        return true;
+        boolean isSuccess = alunoDAO.insertAluno(aluno);
+        return isSuccess;
     }
     
     public boolean deleteAlunoFromBD(int id) {
-        int indice = this.procuraIndiceAluno(id);
-        AlunoDAO.minhaLista.remove(indice);
-        return true;
+        return alunoDAO.deleteAlunoById(id);
     }
     
-    public boolean updateAlunoInBD(int id, Aluno aluno) {
-        int indice = this.procuraIndiceAluno(id);
-        AlunoDAO.minhaLista.set(indice, aluno);
-        return true;
+    public boolean updateAlunoInBD(Aluno aluno) {
+        return alunoDAO.updateAluno(aluno);
     }
     
     private int procuraIndiceAluno(int id) {
         int indice = -1;
-        for (int i = 0; i < AlunoDAO.minhaLista.size(); i++) {
-            if (AlunoDAO.minhaLista.get(i).getId() == id) {
+        for (int i = 0; i < alunoDAO.getMinhaListaAlunos().size(); i++) {
+            if (alunoDAO.getMinhaListaAlunos().get(i).getId() == id) {
                 indice = i;
             }
         }
         return indice;
     }
     
-    public int maiorId() {
-        return AlunoDAO.maiorId();
-    }
-    
     public Aluno carregaAluno(int id) {
         int indice = this.procuraIndiceAluno(id);
-        return AlunoDAO.minhaLista.get(indice);
+        return alunoDAO.getMinhaListaAlunos().get(indice);
     }
       
     
     public List<Aluno> getMinhaLista(String inputPesquisa, String comboBoxTipoPesquisa) {
         ArrayList<Aluno> resultList = new ArrayList<>();
        
-        for (int i = 0; i < AlunoDAO.minhaLista.size(); i++) {
-            Aluno currAluno = AlunoDAO.minhaLista.get(i);
+        for (int i = 0; i < alunoDAO.getMinhaListaAlunos().size(); i++) {
+            Aluno currAluno = alunoDAO.getMinhaListaAlunos().get(i);
             String novoInputPesquisa = inputPesquisa.toLowerCase();
             
             switch (comboBoxTipoPesquisa) {
