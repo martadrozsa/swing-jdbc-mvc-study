@@ -362,18 +362,17 @@ public class TelaGerenciarAluno extends javax.swing.JFrame {
             //retorna 0 -> primeiro botão | 1 -> segundo botão | 2 -> terceiro botão
             int resposta_usuario = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja APAGAR este Aluno?");
             if (resposta_usuario == 0) { //cliclou em SIM
+                if (this.controlador.apagar(id)) {
+                    //limpa os campos
+                    this.inputNome.setText("");
+                    this.inputIdade.setText("");
+                    this.inputCurso.setText("");
+                    this.inputFase.setText("");
+                    JOptionPane.showMessageDialog(rootPane, "Aluno apagado com sucesso");
+                }
+                System.out.println(this.controlador.getMinhaLista().toString());
+            }
 
-            //envia os dados para o controlador processar
-            }
-            if (this.controlador.apagar(id)) {
-                //limpa os campos
-                this.inputNome.setText("");
-                this.inputIdade.setText("");
-                this.inputCurso.setText("");
-                this.inputFase.setText("");
-                JOptionPane.showMessageDialog(rootPane, "Aluno apagado com sucesso");
-            }
-            System.out.println(this.controlador.getMinhaLista().toString());
 
         }catch (Mensagem erro) {
             JOptionPane.showMessageDialog(null, erro.getMessage());

@@ -14,7 +14,6 @@ public class AlunoDAO {
     
     private Connection connect;
     private Statement statement;
-    private ResultSet resultSet;
    
     public AlunoDAO() {
         connectToDatabase("localhost", 3306, "sistema_curso", "root", "pass");
@@ -34,9 +33,7 @@ public class AlunoDAO {
             System.out.println("Failed to connect to database: " + ex.toString());
         }
     }
-    
-//    private static ArrayList<Aluno> minhaLista = new ArrayList<>();
-    
+        
     public List<Aluno> getMinhaListaAlunos(){
         try {
             String query = "SELECT * FROM aluno";
@@ -44,31 +41,34 @@ public class AlunoDAO {
             // Recupera dados da base.
             ResultSet resultSet = statement.executeQuery(query);
 
-
-            // transforma as rows do database -> objetos em lista local
-            // transforma os dados da tabela na base em dados (objetos) em uma lista
-
-            List<Aluno> alunos = new ArrayList<>();
-            while (resultSet.next()) {
-
-                String curso = resultSet.getString("curso");
-                int fase = resultSet.getInt("fase");
-                int id = resultSet.getInt("id");
-                String nome = resultSet.getString("nome");
-                int idade = resultSet.getInt("idade");
-
-                Aluno aluno = new Aluno(curso, fase, id, nome, idade);
-                alunos.add(aluno);
-            }
+            List<Aluno> alunos = parseResultSetToAluno(resultSet);
 
             // Todos os alunos na lista "alunos"
-
             return alunos;
             
         } catch (Exception ex) {
             System.out.println("Error while querying data: " + ex.toString());
             return new ArrayList<>();
         }
+    }
+
+    // transforma as rows do database -> objetos em lista local
+    // transforma os dados da tabela na base em dados (objetos) em uma lista
+    public List<Aluno> parseResultSetToAluno(ResultSet resultSet) throws SQLException {
+        List<Aluno> alunos = new ArrayList<>();
+        
+        while (resultSet.next()) {
+            String curso = resultSet.getString("curso");
+            int fase = resultSet.getInt("fase");
+            int id = resultSet.getInt("id");
+            String nome = resultSet.getString("nome");
+            int idade = resultSet.getInt("idade");
+
+            Aluno aluno = new Aluno(curso, fase, id, nome, idade);
+            alunos.add(aluno);
+        }
+        
+        return alunos;
     }
     
     public boolean insertAluno(Aluno aluno) {
@@ -125,5 +125,59 @@ public class AlunoDAO {
         }
         
         return true;
+    }
+    
+    public List<Aluno> getMinhaListByNome(String nome) {
+        // database, me entrega todos as linhas na tabela aluno que tem o nome parecido com "nome".
+        try {
+            String termoBusca = "%" + nome + "%";
+            
+            String queryStatement = "SELECT * FROM aluno WHERE nome LIKE ?";
+            PreparedStatement preparedStatement = connect.prepareStatement(queryStatement);
+            preparedStatement.setString(1, termoBusca);
+
+            // Recupera dados da base.
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<Aluno> alunos = parseResultSetToAluno(resultSet);
+
+            // Todos os alunos na lista "alunos"
+            return alunos;
+            
+        } catch (Exception ex) {
+            System.out.println("Error while querying data: " + ex.toString());
+            return new ArrayList<>();
+        }
+    }
+    
+    public List<Aluno> getMinhaListByCurso(String curso) {
+        
+        return new ArrayList<>();
+    }
+    
+    public List<Aluno> getMinhaListByIdade(int idade) {
+        // database, me entrega todos as linhas na tabela aluno que tem o nome parecido com "nome".
+        try {            
+            String queryStatement = "SELECT * FROM aluno WHERE idade=?";
+            PreparedStatement preparedStatement = connect.prepareStatement(queryStatement);
+            preparedStatement.setInt(1, idade);
+
+            // Recupera dados da base.
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            List<Aluno> alunos = parseResultSetToAluno(resultSet);
+
+            // Todos os alunos na lista "alunos"
+            return alunos;
+            
+        } catch (Exception ex) {
+            System.out.println("Error while querying data: " + ex.toString());
+            return new ArrayList<>();
+        }
+    }
+    
+    public List<Aluno> getMinhaListByFase(int fase) {
+        
+        return new ArrayList<>();
     }
 }

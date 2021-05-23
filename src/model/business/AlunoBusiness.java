@@ -44,42 +44,61 @@ public class AlunoBusiness {
         int indice = this.procuraIndiceAluno(id);
         return alunoDAO.getMinhaListaAlunos().get(indice);
     }
+    
+    public List<Aluno> getMinhaLista(String inputPesquisa, String comboBoxTipoPesquisa) {        
+        switch (comboBoxTipoPesquisa) {
+            case "Nome":
+                return alunoDAO.getMinhaListByNome(inputPesquisa);
+
+            case "Curso":
+                return alunoDAO.getMinhaListByCurso(inputPesquisa);
+
+            case "Idade":
+                return alunoDAO.getMinhaListByIdade(Integer.parseInt(inputPesquisa));
+
+            case "Fase":
+                return alunoDAO.getMinhaListByFase(Integer.parseInt(inputPesquisa));
+        }
+        
+        return new ArrayList<>();
+    }
       
     
-    public List<Aluno> getMinhaLista(String inputPesquisa, String comboBoxTipoPesquisa) {
-        ArrayList<Aluno> resultList = new ArrayList<>();
-       
-        for (int i = 0; i < alunoDAO.getMinhaListaAlunos().size(); i++) {
-            Aluno currAluno = alunoDAO.getMinhaListaAlunos().get(i);
-            String novoInputPesquisa = inputPesquisa.toLowerCase();
-            
-            switch (comboBoxTipoPesquisa) {
-                case "Nome":
-                    if (currAluno.getNome().toLowerCase().contains(novoInputPesquisa)) {
-                        resultList.add(currAluno);
-                    }
-                break;
-
-                case "Idade":
-                    if (currAluno.getIdade() == Integer.parseInt(inputPesquisa)) {
-                        resultList.add(currAluno);
-                    }
-                break;
-
-                case "Curso":
-                    if (currAluno.getCurso().toLowerCase().contains(novoInputPesquisa)) {
-                        resultList.add(currAluno);
-                    }
-                break;
-
-                case "Fase":
-                    if (currAluno.getFase()== Integer.parseInt(inputPesquisa)) {
-                        resultList.add(currAluno);
-                    }
-                break;
-            }
-        }
-        return resultList;
-    }
+//    public List<Aluno> getMinhaLista(String inputPesquisa, String comboBoxTipoPesquisa) {
+//        
+//        ArrayList<Aluno> resultList = new ArrayList<>();
+//
+//        for (int i = 0; i < alunoDAO.getMinhaListaAlunos().size(); i++) {
+//            Aluno currAluno = alunoDAO.getMinhaListaAlunos().get(i);
+//            String novoInputPesquisa = inputPesquisa.toLowerCase();
+//            
+//            switch (comboBoxTipoPesquisa) {
+//                case "Nome":
+//                    if (currAluno.getNome().toLowerCase().contains(novoInputPesquisa)) {
+//                        resultList.add(currAluno);
+//                    }
+//                break;
+//
+//                case "Idade":
+//                    if (currAluno.getIdade() == Integer.parseInt(inputPesquisa)) {
+//                        resultList.add(currAluno);
+//                    }
+//                break;
+//
+//                case "Curso":
+//                    if (currAluno.getCurso().toLowerCase().contains(novoInputPesquisa)) {
+//                        resultList.add(currAluno);
+//                    }
+//                break;
+//
+//                case "Fase":
+//                    if (currAluno.getFase()== Integer.parseInt(inputPesquisa)) {
+//                        resultList.add(currAluno);
+//                    }
+//                break;
+//            }
+//        }
+//        return resultList;
+//    }
 }
 
