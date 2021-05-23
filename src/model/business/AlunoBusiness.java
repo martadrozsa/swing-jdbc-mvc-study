@@ -62,43 +62,6 @@ public class AlunoBusiness {
         
         return new ArrayList<>();
     }
-      
-    
-//    public List<Aluno> getMinhaLista(String inputPesquisa, String comboBoxTipoPesquisa) {
-//        
-//        ArrayList<Aluno> resultList = new ArrayList<>();
-//
-//        for (int i = 0; i < alunoDAO.getMinhaListaAlunos().size(); i++) {
-//            Aluno currAluno = alunoDAO.getMinhaListaAlunos().get(i);
-//            String novoInputPesquisa = inputPesquisa.toLowerCase();
-//            
-//            switch (comboBoxTipoPesquisa) {
-//                case "Nome":
-//                    if (currAluno.getNome().toLowerCase().contains(novoInputPesquisa)) {
-//                        resultList.add(currAluno);
-//                    }
-//                break;
-//
-//                case "Idade":
-//                    if (currAluno.getIdade() == Integer.parseInt(inputPesquisa)) {
-//                        resultList.add(currAluno);
-//                    }
-//                break;
-//
-//                case "Curso":
-//                    if (currAluno.getCurso().toLowerCase().contains(novoInputPesquisa)) {
-//                        resultList.add(currAluno);
-//                    }
-//                break;
-//
-//                case "Fase":
-//                    if (currAluno.getFase()== Integer.parseInt(inputPesquisa)) {
-//                        resultList.add(currAluno);
-//                    }
-//                break;
-//            }
-//        }
-//        return resultList;
-//    }
+     
 }
 
