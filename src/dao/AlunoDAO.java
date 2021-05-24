@@ -22,7 +22,7 @@ public class AlunoDAO {
     private void connectToDatabase(String ip, int port, String schema, String username, String password) {
         try {
             // This will load the MySQL driver, each DB has its own driver
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             String connectionStr = "jdbc:mysql://" + ip + ":" + port + "/" + schema + "?user=" + username + "&password=" + password + "&serverTimezone=UTC";
            
             connect = DriverManager.getConnection(connectionStr);
