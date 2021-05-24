@@ -19,24 +19,14 @@ public class ProfessorControl {
     
        
     public boolean cadastrar(double salario, String titulacao, String nome, int idade) {
-        int id = professorBusiness.maiorId() + 1;
-
-        Professor professor = new Professor(salario, titulacao, id, nome, idade);
-
-        if (professorBusiness.insertProfessorIntoBD(professor)) {
-            return true;
-        } else {
-            return false;
-        }
+        Professor professor = new Professor(salario, titulacao, 0, nome, idade);
+        return professorBusiness.insertProfessorIntoBD(professor);
     }
 
     public boolean editar(double salario, String titulacao, int id, String nome, int idade) {
         Professor professor = new Professor(salario, titulacao, id, nome, idade);
-        if (professorBusiness.updateProfessorInBD(id, professor)) {
-            return true;
-        } else {
-            return false;
-        }
+        return professorBusiness.updateProfessorInBD(professor); 
+  
     }
 
     public boolean apagar(int id) {
@@ -47,14 +37,14 @@ public class ProfessorControl {
         }
     }
 
-    public ArrayList getMinhaLista() {
-        return professorBusiness.getListaProfessores();
+    public List getMinhaLista() {
+        return professorBusiness.getMinhaLista();
     }
 
     
     @SuppressWarnings("unchecked")
     public String[][] getMinhaMatrizTexto() {
-        ArrayList<Professor> minhalista = professorBusiness.getListaProfessores();
+        List<Professor> minhalista = professorBusiness.getMinhaLista();
         int tamanho = minhalista.size();
         String[][] matrizProfessor = new String[tamanho][5];
         for (int i = 0; i < tamanho; i++) {
