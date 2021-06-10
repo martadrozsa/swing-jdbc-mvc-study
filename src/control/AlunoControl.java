@@ -31,8 +31,6 @@ public class AlunoControl {
         return alunoBusiness.getMinhaLista();
     }
     
-    
-
     @SuppressWarnings("unchecked")
     public String[][] getMinhaMatrizTexto() {
         List<Aluno> minhalista = alunoBusiness.getMinhaLista();
@@ -62,5 +60,4 @@ public class AlunoControl {
         }
         return resulMatrizAlunos;
     }
-
 }

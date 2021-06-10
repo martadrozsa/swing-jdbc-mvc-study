@@ -60,7 +60,7 @@ public class TelaGerenciarAluno extends javax.swing.JFrame {
                 return false;
             }
             default:
-                return true;
+                return false;
          }
     }
     

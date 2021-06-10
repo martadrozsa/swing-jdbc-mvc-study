@@ -30,11 +30,7 @@ public class ProfessorControl {
     }
 
     public boolean apagar(int id) {
-        if (professorBusiness.deleteProfessorFromBD(id)) {
-            return true;
-        } else {
-            return false;
-        }
+        return professorBusiness.deleteProfessorFromBD(id);
     }
 
     public List getMinhaLista() {

@@ -15,6 +15,7 @@ public class AlunoDAO {
     private Connection connect;
     private Statement statement;
    
+    
     public AlunoDAO() {
         connectToDatabase("localhost", 3306, "sistema_curso", "root", "pass");
     }
@@ -75,6 +76,7 @@ public class AlunoDAO {
         try {
             String insertStatement = "INSERT INTO aluno(curso, fase, nome, idade) VALUES (?, ?, ?, ?)";
             PreparedStatement preparedStatement = connect.prepareStatement(insertStatement);
+            
             preparedStatement.setString(1, aluno.getCurso());
             preparedStatement.setInt(2, aluno.getFase());
             preparedStatement.setString(3, aluno.getNome());
@@ -90,24 +92,20 @@ public class AlunoDAO {
     }
     
     public boolean updateAluno(Aluno aluno) {
+        String updateStatement = "UPDATE aluno SET curso=?, fase=?, nome=?, idade=? WHERE id=?";
         try {
-            String updateStatement = "UPDATE aluno SET curso=?, fase=?, nome=?, idade=? WHERE id=?";
             PreparedStatement preparedStatement = connect.prepareStatement(updateStatement);
-            
             preparedStatement.setString(1, aluno.getCurso());
             preparedStatement.setInt(2, aluno.getFase());
             preparedStatement.setString(3, aluno.getNome());
             preparedStatement.setInt(4, aluno.getIdade());
-
             preparedStatement.setInt(5, aluno.getId());
-            
             preparedStatement.executeUpdate();
 
         } catch (Exception ex) {
             System.out.println("Error while updating data: " + ex.toString());
             return false;
         }
-        
         return true;
     }
     
@@ -116,7 +114,6 @@ public class AlunoDAO {
             String deleteStatement = "DELETE FROM aluno WHERE id=?";
             PreparedStatement preparedStatement = connect.prepareStatement(deleteStatement);
             preparedStatement.setInt(1, id);
-            
             preparedStatement.executeUpdate();
 
         } catch (Exception ex) {
@@ -129,10 +126,10 @@ public class AlunoDAO {
     
     public List<Aluno> getMinhaListByNome(String nome) {
         // database, me entrega todos as linhas na tabela aluno que tem o nome parecido com "nome".
-        try {
             String termoBusca = "%" + nome + "%";
-            
             String queryStatement = "SELECT * FROM aluno WHERE nome LIKE ?";
+            
+        try {
             PreparedStatement preparedStatement = connect.prepareStatement(queryStatement);
             preparedStatement.setString(1, termoBusca);
 
@@ -141,6 +138,7 @@ public class AlunoDAO {
 
             List<Aluno> alunos = parseResultSetToAluno(resultSet);
 
+            preparedStatement.close();
             // Todos os alunos na lista "alunos"
             return alunos;
             
@@ -151,11 +149,11 @@ public class AlunoDAO {
     }
     
     public List<Aluno> getMinhaListByCurso(String curso) {
-      // database, me entrega todos as linhas na tabela aluno que tem o nome parecido com "curso".
-        try {
+      // database, me entrega todos as linhas na tabela aluno que tem o nome parecido com "curso".  
             String termoBusca = "%" + curso + "%";
-            
             String queryStatement = "SELECT * FROM aluno WHERE curso LIKE ?";
+            
+        try {
             PreparedStatement preparedStatement = connect.prepareStatement(queryStatement);
             preparedStatement.setString(1, termoBusca);
 
@@ -163,7 +161,8 @@ public class AlunoDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             List<Aluno> alunos = parseResultSetToAluno(resultSet);
-
+            
+            preparedStatement.close();
             // Todos os alunos na lista "alunos"
             return alunos;
             
@@ -174,9 +173,10 @@ public class AlunoDAO {
     }
     
     public List<Aluno> getMinhaListByIdade(int idade) {
-        // database, me entrega todos as linhas na tabela aluno que tem o nome parecido com "nome".
-        try {            
+        // database, me entrega todos as linhas na tabela aluno que tem a idade = ?
             String queryStatement = "SELECT * FROM aluno WHERE idade=?";
+
+        try {  
             PreparedStatement preparedStatement = connect.prepareStatement(queryStatement);
             preparedStatement.setInt(1, idade);
 
@@ -184,7 +184,8 @@ public class AlunoDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             List<Aluno> alunos = parseResultSetToAluno(resultSet);
-
+            
+            preparedStatement.close();
             // Todos os alunos na lista "alunos"
             return alunos;
             
@@ -195,9 +196,10 @@ public class AlunoDAO {
     }
     
     public List<Aluno> getMinhaListByFase(int fase) {
-         // database, me entrega todos as linhas na tabela aluno que tem o nome parecido com "nome".
-        try {            
-            String queryStatement = "SELECT * FROM aluno WHERE fase=?";
+        // database, me entrega todos as linhas na tabela aluno que tem a fase = ?
+        String queryStatement = "SELECT * FROM aluno WHERE fase=?";
+
+        try {       
             PreparedStatement preparedStatement = connect.prepareStatement(queryStatement);
             preparedStatement.setInt(1, fase);
 
@@ -205,7 +207,8 @@ public class AlunoDAO {
             ResultSet resultSet = preparedStatement.executeQuery();
 
             List<Aluno> alunos = parseResultSetToAluno(resultSet);
-
+            
+            preparedStatement.close();
             // Todos os alunos na lista "alunos"
             return alunos;
             
@@ -213,9 +216,5 @@ public class AlunoDAO {
             System.out.println("Error while querying data: " + ex.toString());
             return new ArrayList<>();
         }
-    }
-    
-    
-    
-    
+    }   
 }

@@ -80,7 +80,7 @@ public class TelaGerenciarProfessor extends javax.swing.JFrame {
                 return false;
             }
             default:
-                return true;
+                return false;
          }
     }
     
@@ -94,7 +94,7 @@ public class TelaGerenciarProfessor extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         btnLimpar = new javax.swing.JButton();
         inputIdade = new javax.swing.JTextField();
-        comboBoxPesquisa = new javax.swing.JComboBox<>();
+        comboBoxTipoPesquisa = new javax.swing.JComboBox<>();
         jLabel3 = new javax.swing.JLabel();
         comboBoxTitulacao = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
@@ -136,11 +136,10 @@ public class TelaGerenciarProfessor extends javax.swing.JFrame {
 
         inputIdade.setFont(new java.awt.Font("Dialog", 0, 14)); // NOI18N
 
-        comboBoxPesquisa.setBackground(java.awt.SystemColor.scrollbar);
-        comboBoxPesquisa.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
-        comboBoxPesquisa.setForeground(new java.awt.Color(51, 51, 51));
-        comboBoxPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nome", "Idade", "Titulação", "Salário" }));
-        comboBoxPesquisa.setSelectedIndex(-1);
+        comboBoxTipoPesquisa.setBackground(java.awt.SystemColor.scrollbar);
+        comboBoxTipoPesquisa.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        comboBoxTipoPesquisa.setForeground(new java.awt.Color(51, 51, 51));
+        comboBoxTipoPesquisa.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Nome", "Idade", "Titulação", "Salário" }));
 
         jLabel3.setFont(new java.awt.Font("Bell MT", 1, 22)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(51, 51, 51));
@@ -259,7 +258,7 @@ public class TelaGerenciarProfessor extends javax.swing.JFrame {
                                 .addGroup(jPanel2Layout.createSequentialGroup()
                                     .addComponent(inputPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 672, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(18, 18, 18)
-                                    .addComponent(comboBoxPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(comboBoxTipoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(18, 18, 18)
                                     .addComponent(btnPesquisar)
                                     .addGap(18, 18, 18)
@@ -294,7 +293,7 @@ public class TelaGerenciarProfessor extends javax.swing.JFrame {
                     .addComponent(inputPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnPesquisar)
                     .addComponent(btnLimpar, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(comboBoxPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboBoxTipoPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(66, 66, 66)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
@@ -356,7 +355,7 @@ public class TelaGerenciarProfessor extends javax.swing.JFrame {
     private void btnPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarActionPerformed
         String input = this.inputPesquisa.getText();
 
-        Object inputComboBox = this.comboBoxPesquisa.getSelectedItem();
+        Object inputComboBox = this.comboBoxTipoPesquisa.getSelectedItem();
         String inputComboBoxString = (String) inputComboBox;
 
         boolean valido = validaInput(input, inputComboBoxString);
@@ -383,16 +382,18 @@ public class TelaGerenciarProfessor extends javax.swing.JFrame {
             int resposta_usuario = JOptionPane.showConfirmDialog(null, "Tem certeza que deseja APAGAR este Professor?");
             if (resposta_usuario == 0) { //cliclou em SIM
 
+                if (this.controlador.apagar(id)) {
+                    //limpa os campos
+                    this.inputNome.setText("");
+                    this.inputIdade.setText("");
+                    this.comboBoxTitulacao.setSelectedIndex(-1);
+                    this.inputSalario.setText("");
+                    JOptionPane.showMessageDialog(rootPane, "Professor apagado com sucesso");
+                }
+                System.out.println(this.controlador.getMinhaLista().toString());
+
             }
-            if (this.controlador.apagar(id)) {
-                //limpa os campos
-                this.inputNome.setText("");
-                this.inputIdade.setText("");
-                this.comboBoxTitulacao.setSelectedIndex(-1);
-                this.inputSalario.setText("");
-                JOptionPane.showMessageDialog(rootPane, "Professor apagado com sucesso");
-            }
-            System.out.println(this.controlador.getMinhaLista().toString());
+
 
         }catch (Mensagem erro) {
             JOptionPane.showMessageDialog(null, erro.getMessage());
@@ -532,7 +533,7 @@ public class TelaGerenciarProfessor extends javax.swing.JFrame {
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnLimpar;
     private javax.swing.JButton btnPesquisar;
-    private javax.swing.JComboBox<String> comboBoxPesquisa;
+    private javax.swing.JComboBox<String> comboBoxTipoPesquisa;
     private javax.swing.JComboBox<String> comboBoxTitulacao;
     private javax.swing.JTextField inputIdade;
     private javax.swing.JTextField inputNome;

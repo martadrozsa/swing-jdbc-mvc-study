@@ -21,30 +21,15 @@ public class AlunoBusiness {
         boolean isSuccess = alunoDAO.insertAluno(aluno);
         return isSuccess;
     }
-    
-    public boolean deleteAlunoFromBD(int id) {
-        return alunoDAO.deleteAlunoById(id);
-    }
-    
+      
     public boolean updateAlunoInBD(Aluno aluno) {
         return alunoDAO.updateAluno(aluno);
     }
-    
-    private int procuraIndiceAluno(int id) {
-        int indice = -1;
-        for (int i = 0; i < alunoDAO.getMinhaListaAlunos().size(); i++) {
-            if (alunoDAO.getMinhaListaAlunos().get(i).getId() == id) {
-                indice = i;
-            }
-        }
-        return indice;
+
+    public boolean deleteAlunoFromBD(int id) {
+        return alunoDAO.deleteAlunoById(id);
     }
-    
-    public Aluno carregaAluno(int id) {
-        int indice = this.procuraIndiceAluno(id);
-        return alunoDAO.getMinhaListaAlunos().get(indice);
-    }
-    
+
     public List<Aluno> getMinhaLista(String inputPesquisa, String comboBoxTipoPesquisa) {        
         switch (comboBoxTipoPesquisa) {
             case "Nome":

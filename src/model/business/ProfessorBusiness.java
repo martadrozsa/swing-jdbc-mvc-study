@@ -30,58 +30,23 @@ public class ProfessorBusiness {
     }
     
     public boolean deleteProfessorFromBD(int id) {
-        int indice = this.procuraIndiceProfessor(id);
-        professorDAO.getMinhaListaProfessores().remove(indice);
-        return true;
-    }
-    
-    private int procuraIndiceProfessor(int id) {
-        int indice = -1;
-        for (int i = 0; i < professorDAO.getMinhaListaProfessores().size(); i++) {
-            Professor currProfessor = professorDAO.getMinhaListaProfessores().get(i);
-            if (currProfessor.getId() == id) {
-                indice = i;
-                break;
-            }
-        }
-        return indice;
+        return professorDAO.deleteProfessorById(id);
     }
       
     public List<Professor> getMinhaLista(String inputPesquisa, String comboBoxTipoPesquisa) {
-        List<Professor> resultList = new ArrayList<>();
+        switch (comboBoxTipoPesquisa) {
+            case "Titulação":
+                return professorDAO.getMinhaListByTitulacao(inputPesquisa);
 
-        for (int i = 0; i < professorDAO.getMinhaListaProfessores().size(); i++) {
-            Professor currProfessor = professorDAO.getMinhaListaProfessores().get(i);
-            String novoInputPesquisa = inputPesquisa.toLowerCase();
+            case "Salário":
+                return professorDAO.getMinhaListBySalario(Double.parseDouble(inputPesquisa));
 
-            switch (comboBoxTipoPesquisa) {
-                case "Nome":
-                    if (currProfessor.getNome().toLowerCase().contains(novoInputPesquisa)) {
-                        resultList.add(currProfessor);
-                    }
-                    break;
+            case "Nome":
+                return professorDAO.getMinhaListByNome(inputPesquisa);
 
-                case "Idade":
-                    if (currProfessor.getIdade() == Integer.parseInt(inputPesquisa)) {
-                        resultList.add(currProfessor);
-                    }
-                    break;
-
-                case "Titulação":
-                    if (currProfessor.getTitulacao().toLowerCase().contains(novoInputPesquisa)) {
-                        resultList.add(currProfessor);
-                    }
-                break;
-                case "Salario":
-                    if (currProfessor.getSalario() == Double.parseDouble(inputPesquisa)) {
-                        resultList.add(currProfessor);
-                    }
-                    break;
-            }
+            case "Idade":
+                return professorDAO.getMinhaListByIdade(Integer.parseInt(inputPesquisa));
         }
-        return resultList;
-    }
-
+        return new ArrayList<>();
+    }   
 }
-
-    
